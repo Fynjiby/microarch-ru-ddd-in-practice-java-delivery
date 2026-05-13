@@ -9,10 +9,6 @@ option go_package = "queues/ordereventspb";
 
 import "google/protobuf/timestamp.proto";
 
-message OrderCreatedIntegrationEvent {
-  string order_id = 1;
-}
-
 message OrderAssignedIntegrationEvent {
   string order_id = 1;
 }
