@@ -1,6 +1,7 @@
 package microarch.delivery.core.domain.model.order;
 
 import org.junit.jupiter.api.Test;
+import java.util.UUID;
 import microarch.delivery.core.domain.model.kernel.Location;
 import microarch.delivery.core.domain.model.kernel.Status;
 import microarch.delivery.core.domain.model.kernel.Volume;
@@ -10,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AssignmentTest {
 
-    private static final Order ORDER = Order.mustCreate();
     private static final Volume VOLUME = Volume.mustCreate(10);
     private static final Location LOCATION = Location.mustCreate(5, 5);
+    private static final Order ORDER = Order.mustCreate(UUID.randomUUID(), LOCATION, VOLUME);
 
     @Test
     void shouldCreateAssignmentWithAssignedStatus() {
