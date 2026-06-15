@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Volume extends ValueObject<Volume> {
-    private static final int MIN_VALUE = 1;
+    private static final int MIN_VALUE = 0;
     private static final int MAX_VALUE = 999;
 
     @Column(name = "volume")
@@ -32,6 +32,30 @@ public class Volume extends ValueObject<Volume> {
 
     public static Volume mustCreate(int value) {
         return create(value).getValueOrThrow();
+    }
+
+    public Volume add(Volume other) {
+        return mustCreate(this.value + other.value);
+    }
+
+    public Volume subtract(Volume other) {
+        return mustCreate(this.value - other.value);
+    }
+
+    public boolean isLessThan(Volume other) {
+        return this.compareTo(other) < 0;
+    }
+
+    public boolean isLessOrEqualTo(Volume other) {
+        return this.compareTo(other) <= 0;
+    }
+
+    public boolean isGreaterThan(Volume other) {
+        return this.compareTo(other) > 0;
+    }
+
+    public boolean isGreaterOrEqualTo(Volume other) {
+        return this.compareTo(other) >= 0;
     }
 
     @Override
