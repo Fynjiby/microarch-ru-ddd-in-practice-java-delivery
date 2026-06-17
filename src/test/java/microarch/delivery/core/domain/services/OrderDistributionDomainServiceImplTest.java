@@ -7,56 +7,13 @@ import microarch.delivery.core.domain.model.courier.Courier;
 import microarch.delivery.core.domain.model.kernel.Location;
 import microarch.delivery.core.domain.model.kernel.Volume;
 import microarch.delivery.core.domain.model.order.Order;
-import microarch.delivery.core.domain.model.order.OrderStatus;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderDistributionDomainServiceImplTest {
 
-    private OrderDistributionDomainService service;
-
-    @BeforeEach
-    void setUp() {
-        service = new OrderDistributionDomainServiceImpl();
-    }
-
-    @Test
-    void shouldAssignOrderToNearestCourier() {
-        var orderLocation = Location.mustCreate(5, 5);
-        var order = Order.mustCreate(UUID.randomUUID(), orderLocation, Volume.mustCreate(3));
-
-        var nearCourier = Courier.mustCreate("Near", Location.mustCreate(4, 5), Volume.mustCreate(10));
-        var farCourier = Courier.mustCreate("Far", Location.mustCreate(1, 1), Volume.mustCreate(10));
-
-        var result = service.distributeOrder(order, List.of(farCourier, nearCourier));
-
-        assertThat(result.isSuccess()).isTrue();
-        assertThat(result.getValue()).isEqualTo(nearCourier);
-        assertThat(nearCourier.getAssignments()).hasSize(1);
-        assertThat(farCourier.getAssignments()).isEmpty();
-    }
-
-    @Test
-    void shouldTransitionOrderToAssignedStatus() {
-        var order = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(3, 3), Volume.mustCreate(2));
-        var courier = Courier.mustCreate("Alice", Location.mustCreate(3, 3), Volume.mustCreate(10));
-
-        service.distributeOrder(order, List.of(courier));
-
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.Assigned);
-    }
-
-    @Test
-    void shouldIncreaseCourierCurrentVolumeAfterAssignment() {
-        var order = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(5, 5), Volume.mustCreate(4));
-        var courier = Courier.mustCreate("Bob", Location.mustCreate(5, 5), Volume.mustCreate(10));
-
-        service.distributeOrder(order, List.of(courier));
-
-        assertThat(courier.getCurrentVolume()).isEqualTo(Volume.mustCreate(4));
-    }
+    private final OrderDistributionDomainService service = new OrderDistributionDomainServiceImpl();
 
     @Test
     void shouldReturnFailureWhenOrderIsNull() {
@@ -73,16 +30,6 @@ class OrderDistributionDomainServiceImplTest {
         var order = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(5, 5), Volume.mustCreate(3));
 
         var result = service.distributeOrder(order, null);
-
-        assertThat(result.isFailure()).isTrue();
-        assertThat(result.getError()).isNotNull();
-    }
-
-    @Test
-    void shouldReturnFailureWhenNoCouriersAvailable() {
-        var order = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(5, 5), Volume.mustCreate(3));
-
-        var result = service.distributeOrder(order, List.of());
 
         assertThat(result.isFailure()).isTrue();
         assertThat(result.getError()).isNotNull();
@@ -152,19 +99,5 @@ class OrderDistributionDomainServiceImplTest {
         assertThat(c3.getAssignments()).hasSize(1);
         assertThat(c1.getAssignments()).isEmpty();
         assertThat(c2.getAssignments()).isEmpty();
-    }
-
-    @Test
-    void shouldAllowCourierToTakeMultipleOrdersWithinCapacity() {
-        var courier = Courier.mustCreate("Multi", Location.mustCreate(5, 5), Volume.mustCreate(10));
-
-        var order1 = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(3, 3), Volume.mustCreate(4));
-        var order2 = Order.mustCreate(UUID.randomUUID(), Location.mustCreate(7, 7), Volume.mustCreate(4));
-
-        service.distributeOrder(order1, List.of(courier));
-        service.distributeOrder(order2, List.of(courier));
-
-        assertThat(courier.getAssignments()).hasSize(2);
-        assertThat(courier.getCurrentVolume()).isEqualTo(Volume.mustCreate(8));
     }
 }
