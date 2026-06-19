@@ -34,8 +34,8 @@ class CreateOrderCommandHandlerImplTest {
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        var command = CreateOrderCommand.create(
-                UUID.randomUUID(), "Russia", "Moscow", "Lenina", "1", "10", 5).getValue();
+        var command = CreateOrderCommand.create(UUID.randomUUID(), "Russia", "Moscow", "Lenina", "1", "10", 5)
+                .getValue();
         when(geoService.getLocation(any())).thenReturn(Location.mustCreate(3, 4));
 
         var result = handler.handle(command);
@@ -48,8 +48,8 @@ class CreateOrderCommandHandlerImplTest {
     @Test
     void shouldCallGeoServiceWithCommandAddress() {
         var address = Address.mustCreate("Russia", "Moscow", "Lenina", "1", null);
-        var command = CreateOrderCommand.create(
-                UUID.randomUUID(), "Russia", "Moscow", "Lenina", "1", null, 3).getValue();
+        var command = CreateOrderCommand.create(UUID.randomUUID(), "Russia", "Moscow", "Lenina", "1", null, 3)
+                .getValue();
         when(geoService.getLocation(any())).thenReturn(Location.mustCreate(7, 7));
 
         handler.handle(command);

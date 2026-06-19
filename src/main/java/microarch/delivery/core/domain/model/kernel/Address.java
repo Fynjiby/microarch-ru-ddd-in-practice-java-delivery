@@ -19,25 +19,28 @@ public class Address extends ValueObject<Address> {
     private final String house;
     private final String apartment;
 
-    public static Result<Address, Error> create(
-            String country, String city, String street, String house, String apartment) {
+    public static Result<Address, Error> create(String country, String city, String street, String house,
+            String apartment) {
         var err = Guard.againstNullOrEmpty(country, "country");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         err = Guard.againstNullOrEmpty(city, "city");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         err = Guard.againstNullOrEmpty(street, "street");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         err = Guard.againstNullOrEmpty(house, "house");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         return Result.success(new Address(country, city, street, house, apartment));
     }
 
-    public static Address mustCreate(
-            String country, String city, String street, String house, String apartment) {
+    public static Address mustCreate(String country, String city, String street, String house, String apartment) {
         return create(country, city, street, house, apartment).getValueOrThrow();
     }
 

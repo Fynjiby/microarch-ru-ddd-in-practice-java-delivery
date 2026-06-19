@@ -18,11 +18,7 @@ public class GetAllCouriersQueryHandlerImpl implements GetAllCouriersQueryHandle
     public Result<List<CourierDto>, Error> handle(GetAllCouriersQuery query) {
         var couriers = courierRepository.findAll();
         var dtos = couriers.stream()
-                .map(c -> new CourierDto(
-                        c.getId(),
-                        c.getName(),
-                        c.getLocation().getX(),
-                        c.getLocation().getY()))
+                .map(c -> new CourierDto(c.getId(), c.getName(), c.getLocation().getX(), c.getLocation().getY()))
                 .toList();
         return Result.success(dtos);
     }

@@ -22,11 +22,13 @@ public class MoveCourierCommandHandlerImpl implements MoveCourierCommandHandler 
     @Transactional
     public UnitResult<Error> handle(MoveCourierCommand command) {
         var courierOpt = courierRepository.findById(command.getCourierId());
-        if (courierOpt.isEmpty()) return UnitResult.failure(GeneralErrors.notFound("Courier", command.getCourierId()));
+        if (courierOpt.isEmpty())
+            return UnitResult.failure(GeneralErrors.notFound("Courier", command.getCourierId()));
 
         var courier = courierOpt.get();
         var moveResult = courier.move(command.getTargetLocation());
-        if (moveResult.isFailure()) return UnitResult.failure(moveResult.getError());
+        if (moveResult.isFailure())
+            return UnitResult.failure(moveResult.getError());
 
         courierRepository.update(courier);
         domainEventPublisher.publish(List.of(courier));

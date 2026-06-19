@@ -67,27 +67,23 @@ class AssignmentTest {
 
     @Test
     void shouldThrowWhenOrderIsNullOnCreate() {
-        assertThatThrownBy(() -> Assignment.create(null, VOLUME, LOCATION))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> Assignment.create(null, VOLUME, LOCATION)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void shouldThrowWhenVolumeIsNullOnCreate() {
-        assertThatThrownBy(() -> Assignment.create(ORDER, null, LOCATION))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> Assignment.create(ORDER, null, LOCATION)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void shouldThrowWhenLocationIsNullOnCreate() {
-        assertThatThrownBy(() -> Assignment.create(ORDER, VOLUME, null))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> Assignment.create(ORDER, VOLUME, null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void shouldThrowWhenCurrentLocationIsNullOnComplete() {
         var assignment = Assignment.mustCreate(ORDER, VOLUME, LOCATION);
 
-        assertThatThrownBy(() -> assignment.complete(null))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> assignment.complete(null)).isInstanceOf(NullPointerException.class);
     }
 }

@@ -17,11 +17,7 @@ public class GetNotCompletedOrdersQueryHandlerImpl implements GetNotCompletedOrd
     @Override
     public Result<List<OrderDto>, Error> handle(GetNotCompletedOrdersQuery query) {
         var orders = orderRepository.findAllNotCompleted();
-        var dtos = orders.stream()
-                .map(o -> new OrderDto(
-                        o.getId(),
-                        o.getLocation().getX(),
-                        o.getLocation().getY()))
+        var dtos = orders.stream().map(o -> new OrderDto(o.getId(), o.getLocation().getX(), o.getLocation().getY()))
                 .toList();
         return Result.success(dtos);
     }

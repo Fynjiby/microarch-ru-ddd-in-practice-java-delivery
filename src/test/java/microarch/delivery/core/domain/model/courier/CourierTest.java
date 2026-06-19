@@ -186,8 +186,7 @@ class CourierTest {
     void shouldThrowWhenMoveToNullLocation() {
         var courier = Courier.mustCreate("Ivan", LOCATION, MAX_VOLUME);
 
-        assertThatThrownBy(() -> courier.move(null))
-                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> courier.move(null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -197,7 +196,6 @@ class CourierTest {
 
         var assignments = courier.getAssignments();
 
-        assertThatThrownBy(() -> assignments.clear())
-                .isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> assignments.clear()).isInstanceOf(UnsupportedOperationException.class);
     }
 }

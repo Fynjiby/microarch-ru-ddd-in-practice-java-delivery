@@ -55,13 +55,7 @@ class LocationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "1, 1, 1, 1, 0",
-        "4, 9, 2, 6, 5",
-        "5, 5, 1, 1, 8",
-        "1, 5, 5, 1, 8",
-        "1, 1, 10, 10, 18"
-    })
+    @CsvSource({ "1, 1, 1, 1, 0", "4, 9, 2, 6, 5", "5, 5, 1, 1, 8", "1, 5, 5, 1, 8", "1, 1, 10, 10, 18" })
     void shouldCalculateDistanceCorrectly(int x1, int y1, int x2, int y2, int expectedDistance) {
         var from = Location.mustCreate(x1, y1);
         var to = Location.mustCreate(x2, y2);
