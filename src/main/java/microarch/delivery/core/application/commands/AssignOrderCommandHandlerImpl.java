@@ -2,7 +2,6 @@ package microarch.delivery.core.application.commands;
 
 import libs.ddd.DomainEventPublisher;
 import libs.errs.Error;
-import libs.errs.GeneralErrors;
 import libs.errs.UnitResult;
 import microarch.delivery.core.domain.services.OrderDistributionDomainService;
 import microarch.delivery.core.ports.CourierRepository;
@@ -26,7 +25,7 @@ public class AssignOrderCommandHandlerImpl implements AssignOrderCommandHandler 
     @Transactional
     public UnitResult<Error> handle(AssignOrderCommand command) {
         var orderOpt = orderRepository.findAnyCreated();
-        if (orderOpt.isEmpty()) return UnitResult.failure(GeneralErrors.notFound("Order", "Created"));
+        if (orderOpt.isEmpty()) return UnitResult.failure(Error.of("order.no.pending", "No pending orders available for assignment"));
 
         var order = orderOpt.get();
         var couriers = courierRepository.findAll();

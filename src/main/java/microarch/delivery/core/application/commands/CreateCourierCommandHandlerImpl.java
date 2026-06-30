@@ -4,6 +4,7 @@ import libs.ddd.DomainEventPublisher;
 import libs.errs.Error;
 import libs.errs.UnitResult;
 import microarch.delivery.core.domain.model.courier.Courier;
+import microarch.delivery.core.domain.model.kernel.Location;
 import microarch.delivery.core.ports.CourierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class CreateCourierCommandHandlerImpl implements CreateCourierCommandHand
     @Override
     @Transactional
     public UnitResult<Error> handle(CreateCourierCommand command) {
-        var courierResult = Courier.create(command.getName(), command.getLocation());
+        var location = Location.mustCreate(1, 1);
+        var courierResult = Courier.create(command.getName(), location);
         if (courierResult.isFailure()) return UnitResult.failure(courierResult.getError());
 
         var courier = courierResult.getValue();
