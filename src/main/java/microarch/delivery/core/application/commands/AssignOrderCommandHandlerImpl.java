@@ -25,13 +25,15 @@ public class AssignOrderCommandHandlerImpl implements AssignOrderCommandHandler 
     @Transactional
     public UnitResult<Error> handle(AssignOrderCommand command) {
         var orderOpt = orderRepository.findAnyCreated();
-        if (orderOpt.isEmpty()) return UnitResult.failure(Error.of("order.no.pending", "No pending orders available for assignment"));
+        if (orderOpt.isEmpty())
+            return UnitResult.failure(Error.of("order.no.pending", "No pending orders available for assignment"));
 
         var order = orderOpt.get();
         var couriers = courierRepository.findAll();
 
         var distributeResult = orderDistributionDomainService.distributeOrder(order, couriers);
-        if (distributeResult.isFailure()) return UnitResult.failure(distributeResult.getError());
+        if (distributeResult.isFailure())
+            return UnitResult.failure(distributeResult.getError());
 
         var courier = distributeResult.getValue();
         orderRepository.update(order);

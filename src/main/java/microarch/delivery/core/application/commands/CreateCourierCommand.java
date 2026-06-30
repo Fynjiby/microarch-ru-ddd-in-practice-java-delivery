@@ -15,7 +15,8 @@ public final class CreateCourierCommand {
 
     public static Result<CreateCourierCommand, Error> create(String name) {
         var err = Guard.againstNullOrEmpty(name, "name");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         return Result.success(new CreateCourierCommand(name));
     }

@@ -24,19 +24,23 @@ public class CompleteOrderCommandHandlerImpl implements CompleteOrderCommandHand
     @Transactional
     public UnitResult<Error> handle(CompleteOrderCommand command) {
         var courierOpt = courierRepository.findById(command.getCourierId());
-        if (courierOpt.isEmpty()) return UnitResult.failure(GeneralErrors.notFound("Courier", command.getCourierId()));
+        if (courierOpt.isEmpty())
+            return UnitResult.failure(GeneralErrors.notFound("Courier", command.getCourierId()));
 
         var orderOpt = orderRepository.findById(command.getOrderId());
-        if (orderOpt.isEmpty()) return UnitResult.failure(GeneralErrors.notFound("Order", command.getOrderId()));
+        if (orderOpt.isEmpty())
+            return UnitResult.failure(GeneralErrors.notFound("Order", command.getOrderId()));
 
         var courier = courierOpt.get();
         var order = orderOpt.get();
 
         var completeAssignmentResult = courier.completeAssignment(order.getId());
-        if (completeAssignmentResult.isFailure()) return completeAssignmentResult;
+        if (completeAssignmentResult.isFailure())
+            return completeAssignmentResult;
 
         var completeOrderResult = order.complete();
-        if (completeOrderResult.isFailure()) return completeOrderResult;
+        if (completeOrderResult.isFailure())
+            return completeOrderResult;
 
         courierRepository.update(courier);
         orderRepository.update(order);

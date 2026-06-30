@@ -22,8 +22,7 @@ public class OrderDistributionDomainServiceImpl implements OrderDistributionDoma
             return Result.failure(GeneralErrors.valueIsRequired("couriers"));
         }
 
-        var winner = couriers.stream()
-                .filter(c -> c.canTakeOrder(order.getVolume()))
+        var winner = couriers.stream().filter(c -> c.canTakeOrder(order.getVolume()))
                 .min(Comparator.comparingInt(c -> c.getLocation().distanceTo(order.getLocation())));
 
         if (winner.isEmpty()) {
@@ -48,10 +47,8 @@ public class OrderDistributionDomainServiceImpl implements OrderDistributionDoma
     public static final class Errors {
 
         public static Error allCouriersBusy() {
-            return Error.of(
-                    "all.couriers.busy",
-                    "No available couriers to take the order: all couriers are at full capacity"
-            );
+            return Error.of("all.couriers.busy",
+                    "No available couriers to take the order: all couriers are at full capacity");
         }
     }
 }
