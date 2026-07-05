@@ -30,7 +30,7 @@ public class CreateOrderController implements CreateOrderApi {
             return ResponseEntity.badRequest().build();
         var createCommandResult = CreateOrderCommand.create(newOrder.getId(), address.getCountry(), address.getCity(),
                 address.getStreet(), address.getHouse(), address.getApartment(),
-                newOrder.getVolume() != null ? newOrder.getVolume() : 0);
+                newOrder.getVolume());
         if (createCommandResult.isFailure())
             return ResponseEntity.badRequest().build();
         var command = createCommandResult.getValue();

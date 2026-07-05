@@ -23,6 +23,13 @@ public class Volume extends ValueObject<Volume> {
     @Column(name = "volume")
     private int value;
 
+    public static Result<Volume, Error> create(Integer value) {
+        if (value == null) {
+            return Result.failure(GeneralErrors.valueIsRequired("volume"));
+        }
+        return create(value);
+    }
+
     public static Result<Volume, Error> create(int value) {
         if (value < MIN_VALUE || value > MAX_VALUE) {
             return Result.failure(GeneralErrors.valueIsOutOfRange("value", value, MIN_VALUE, MAX_VALUE));
