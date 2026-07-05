@@ -18,10 +18,12 @@ public final class MoveCourierCommand {
 
     public static Result<MoveCourierCommand, Error> create(UUID courierId, int targetX, int targetY) {
         var err = Guard.againstNullOrEmpty(courierId, "courierId");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         var locationResult = Location.create(targetX, targetY);
-        if (locationResult.isFailure()) return Result.failure(locationResult.getError());
+        if (locationResult.isFailure())
+            return Result.failure(locationResult.getError());
 
         return Result.success(new MoveCourierCommand(courierId, locationResult.getValue()));
     }

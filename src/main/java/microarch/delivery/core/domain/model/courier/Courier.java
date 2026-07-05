@@ -79,7 +79,8 @@ public class Courier extends Aggregate<UUID> {
             return Result.failure(GeneralErrors.valueIsRequired("maxVolume"));
         }
         if (maxVolume.getValue() > MAX_ALLOWED_VOLUME) {
-            return Result.failure(GeneralErrors.valueMustBeLessOrEqual("maxVolume", maxVolume.getValue(), MAX_ALLOWED_VOLUME));
+            return Result.failure(
+                    GeneralErrors.valueMustBeLessOrEqual("maxVolume", maxVolume.getValue(), MAX_ALLOWED_VOLUME));
         }
         return Result.success(new Courier(UUID.randomUUID(), name, location, maxVolume));
     }
@@ -111,10 +112,7 @@ public class Courier extends Aggregate<UUID> {
 
     public UnitResult<Error> completeAssignment(UUID orderId) {
         Objects.requireNonNull(orderId, "orderId");
-        var assignment = assignments.stream()
-                .filter(a -> a.getOrderId().equals(orderId))
-                .findFirst()
-                .orElse(null);
+        var assignment = assignments.stream().filter(a -> a.getOrderId().equals(orderId)).findFirst().orElse(null);
         if (assignment == null) {
             return UnitResult.failure(GeneralErrors.notFound("Assignment", orderId));
         }

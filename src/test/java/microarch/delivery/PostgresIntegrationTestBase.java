@@ -7,8 +7,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 public abstract class PostgresIntegrationTestBase {
 
     @SuppressWarnings("resource")
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:15.3")
-            .withDatabaseName("testdb").withUsername("test").withPassword("test");
+    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:15.3").withDatabaseName("testdb")
+            .withUsername("test").withPassword("test");
 
     static {
         POSTGRES.start();

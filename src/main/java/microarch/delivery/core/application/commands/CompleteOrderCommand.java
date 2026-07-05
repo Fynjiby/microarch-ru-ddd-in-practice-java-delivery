@@ -17,10 +17,12 @@ public final class CompleteOrderCommand {
 
     public static Result<CompleteOrderCommand, Error> create(UUID courierId, UUID orderId) {
         var err = Guard.againstNullOrEmpty(courierId, "courierId");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         err = Guard.againstNullOrEmpty(orderId, "orderId");
-        if (err != null) return Result.failure(err);
+        if (err != null)
+            return Result.failure(err);
 
         return Result.success(new CompleteOrderCommand(courierId, orderId));
     }
