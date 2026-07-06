@@ -10,9 +10,9 @@ import microarch.delivery.ApplicationProperties;
 import microarch.delivery.core.domain.model.kernel.Address;
 import microarch.delivery.core.domain.model.kernel.Location;
 import microarch.delivery.core.ports.GeoService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class GeoServiceImpl implements GeoService {
 
     private final ManagedChannel channel;
