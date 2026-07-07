@@ -1,18 +1,50 @@
 package microarch.delivery.adapters.out.grpc;
 
-import java.util.concurrent.ThreadLocalRandom;
+import clients.geo.GeoGrpc;
+import clients.geo.GeoProto;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import jakarta.annotation.PreDestroy;
+import java.util.Objects;
+import microarch.delivery.ApplicationProperties;
 import microarch.delivery.core.domain.model.kernel.Address;
 import microarch.delivery.core.domain.model.kernel.Location;
 import microarch.delivery.core.ports.GeoService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class GeoServiceImpl implements GeoService {
+
+    private final ManagedChannel channel;
+    private final GeoGrpc.GeoBlockingStub stub;
+
+    public GeoServiceImpl(ApplicationProperties properties) {
+        this.channel = ManagedChannelBuilder
+                .forAddress(
+                        properties.getGrpc().getGeoService().getHost(),
+                        properties.getGrpc().getGeoService().getPort())
+                .usePlaintext()
+                .build();
+        this.stub = GeoGrpc.newBlockingStub(channel);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        if (!channel.isShutdown()) {
+            channel.shutdown();
+        }
+    }
 
     @Override
     public Location getLocation(Address address) {
-        int x = ThreadLocalRandom.current().nextInt(1, 11);
-        int y = ThreadLocalRandom.current().nextInt(1, 11);
-        return Location.mustCreate(x, y);
+        Objects.requireNonNull(address, "address");
+
+        var request = GeoProto.GetGeolocationRequest.newBuilder()
+                .setStreet(address.getStreet())
+                .build();
+
+        var response = stub.getGeolocation(request);
+
+        return Location.mustCreate(response.getLocation().getX(), response.getLocation().getY());
     }
 }
